@@ -17,3 +17,6 @@ console.log(evens);
 var numbers2 = [1, 2, 3, 4, 5, 6, 7];
 var sum1 = numbers2.reduce(function (total, n) { return total + n; }, 0);
 console.log(sum1);
+// forEach duyệt mảng khi không cần trả kết quả về
+var numbers4 = [1, 2, 3, 4];
+numbers4.forEach(function (n) { return console.log(n * 2); });
