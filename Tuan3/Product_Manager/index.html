@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeScript Demo</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <h1>TypeScrip Feature Demo</h1>
+    <div id="output"></div>
+    <script src="./demo.js"></script>
+    <script>
+        function appendResult(title, value) {
+          const output = document.getElementById("output");
+          const block = document.createElement("div");
+          block.innerHTML = `<h3>${title}</h3><pre>${JSON.stringify(value, null, 2)}</pre>`;
+          output.appendChild(block);
+        }
+        appendResult("Username", "Alice");
+        appendResult("Age", 25);
+        appendResult("Is Admin", true);
+        appendResult("Scores", [90, 85, 88]);
+        appendResult("User Info (Tuple)", ["Bob", 30]);
+        appendResult("Role (Admin)", "Admin");
+        appendResult("Product 1", { id: 1, name: "Laptop", price: 1500, isAvailable: true });
+        appendResult("Total Price", 1500 + 1500 * 0.1);
+        appendResult("Wrap in Array", [10]);
+        appendResult("String Length", "Hello TS".length);
+        appendResult("Http Method", "DELETE_user");
+        appendResult("Callback Result", "Score is 99");
+        appendResult("Rectangle Area", 10 * 5);
+        appendResult("App Config", {
+        app: {
+            name: "Demo",
+            version: 1.0,
+            features: ["login", "signup"]
+      }
+    });
+  </script>
+    
+</body>
+</html>
