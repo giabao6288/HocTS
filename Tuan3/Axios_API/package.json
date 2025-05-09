@@ -1,0 +1,15 @@
+{
+  "name": "crud-axios-ts",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc",
+    "serve": "npx serve dist"
+  },
+  "dependencies": {
+    "axios": "^1.9.0"
+  },
+  "devDependencies": {
+    "serve": "^14.2.0",
+    "typescript": "^5.1.3"
+  }
+}
