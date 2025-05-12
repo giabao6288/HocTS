@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>React List</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const{useState}=React;
+        function ProductList(){
+            const[products,setProducts]= useState([]);
+            const [newProduct,setNewProduct]=useState("");
+        function handleAdd(){
+            if(newProduct.trim()!==""){
+                setProducts([...products,newProduct]);
+                setNewProduct("");
+            }
+        }
+        return(
+            <div>
+                <h2>Danh sách sản phẩm</h2>
+                <input 
+                    type="text"
+                    value={newProduct}
+                    onChange={(e)=> setNewProduct(e.target.value)}
+                    placeholder="Nhập sản phẩm"
+                />
+                <button onClick={handleAdd}>Thêm</button>
+                <ul>
+                    {products.map((item, index)=>(
+                        <li key={index}>{item}</li>
+                    ))}
+                    </ul>
+                </div>
+            );
+        }
+        const root=ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<ProductList/>);
+    </script>
+</body>
+</html>
