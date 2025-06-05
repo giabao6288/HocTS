@@ -1,0 +1,33 @@
+.container{
+    margin-bottom:40px;
+    background-color: #fff;
+    border-radius:12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    padding:24px;
+}
+h2{
+    font-weight: bold;
+    margin-bottom:20px;
+}
+.create-form{
+    display:flex;
+    flex-wrap:wrap;
+    gap:16px;
+    align-items:center;
+}
+
+.create-form label{
+    font-weight:500;
+    flex-basis: 100px;
+    text-align: right;
+}
+
+
+.create-form input,
+.create-form select{
+    flex:1;
+    min-width:50px;
+}
+.create-form button{
+    margin-left:auto;
+}

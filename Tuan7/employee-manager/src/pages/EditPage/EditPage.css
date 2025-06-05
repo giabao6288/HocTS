@@ -1,0 +1,35 @@
+.container{
+    background-color: #fefefe;
+    padding:24px;
+    border-radius:12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    margin-bottom:40px;
+}
+
+h2{
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.edit-form{
+    display:flex;
+    flex-wrap:wrap;
+    gap:16px;
+    align-items:center;
+}
+
+.edit-form label{
+    font-weight: 500;
+    flex-basis:100px;
+    text-align:right;
+}
+
+.edit-form input,
+.edit-form select{
+    flex:0.5;
+    min-width:50px;
+}
+
+.edit-form button{
+    margin-left:auto;
+}

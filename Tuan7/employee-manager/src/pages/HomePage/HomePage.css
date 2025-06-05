@@ -1,0 +1,38 @@
+.container{
+    padding:24px;
+}
+
+h2{
+    font-weight:bold;
+    margin-bottom:20px;
+}
+
+.employee-table{
+    margin-top:20px;
+    border-radius:8px;
+    overflow:hidden;
+}
+
+.employee-table th,
+.employee-table td{
+    border:1px solid #dee2e6 !important;
+    padding:10px;
+    vertical-align: middle;
+    text-align:center;
+}
+.employee-table{
+    border-collapse: collapse;
+}
+
+thead.table-dark th{
+    background-color: #343a40;
+    color:#fff;
+}
+
+.action-button{
+    white-space:nowrap;
+}
+
+.action-button .btn {
+    min-width: 70px;
+}

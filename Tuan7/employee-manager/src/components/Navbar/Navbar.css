@@ -1,0 +1,21 @@
+.navbar-brand {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.nav-link.active {
+  font-weight: bold;
+  color: #af1e38;;
+}
+
+a{
+  text-decoration: none;
+  color: black;
+  &:hover{
+    color:#a7a7a7;
+  }
+}
+a.navbar-brand{
+  font-size:50px;
+  text-align: center;
+}
