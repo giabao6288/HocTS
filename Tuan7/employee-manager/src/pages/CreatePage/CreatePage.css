@@ -31,3 +31,7 @@ h2{
 .create-form button{
     margin-left:auto;
 }
+
+.btn-create{
+    border-radius: 20px;
+}

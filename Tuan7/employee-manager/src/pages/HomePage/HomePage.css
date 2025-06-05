@@ -36,3 +36,34 @@ thead.table-dark th{
 .action-button .btn {
     min-width: 70px;
 }
+
+.form-search{
+    margin-right: 5px;
+    border-radius: 50px;
+    padding:2px 6px;
+    width: 250px;
+}
+.btn{
+    border-radius: 20px;
+    margin:2px;
+}
+.PageItems{
+
+    justify-content: center;
+    margin-top:3px;
+}
+
+.pagination{
+    gap:5px;
+    display:flex;
+    list-style: none;
+    justify-content: center;
+}
+
+.page-item .page-link{
+    border-radius:50%;
+    width:30px;
+    height: 30px;
+    text-align: center;
+    padding:6px;
+}
