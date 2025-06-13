@@ -1,0 +1,13 @@
+.product-detail{
+    display:flex;
+    gap:20px;
+    padding:20px;
+    align-items:flex-start;
+}
+
+.product-detail img{
+    width:250px;
+    height:auto;
+    object-fit:contain;
+    border-radius:6px;
+}
