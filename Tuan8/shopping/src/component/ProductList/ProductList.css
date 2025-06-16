@@ -30,6 +30,7 @@
     font-size:16px;
     min-height:45px;
     margin-bottom:10px;
+    text-align: center;
 }
 
 .product-actions{
@@ -69,6 +70,12 @@
     border:1px solid #ccc;
     border-radius:5px;
     margin-left: 10px;
+}
+
+.sort-bar{
+    margin-top:10px;
+    display:inline-block;
+    margin-left:20px;
 }
 
 .pagination{

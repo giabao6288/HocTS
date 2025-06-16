@@ -22,6 +22,7 @@ const ProductList = ({onViewDetail,onAddToCart}: Props) => {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage=5;
+    const [sortOption, setSortOption] = useState<string>('default');
 
     useEffect(() => {
         getAllProducts().then(setProducts);
@@ -38,13 +39,28 @@ const ProductList = ({onViewDetail,onAddToCart}: Props) => {
             getProductsByCategory(selectedCategory).then(setProducts);
         }
     },[selectedCategory]);
-
     const filteredProducts = products.filter((prod)=>
         prod.title.toLowerCase().includes(searchTerm.toLowerCase())   
     );
+    
+    const sortedProduct = [...filteredProducts].sort((a,b)=> {
+        switch (sortOption){
+            case 'priceAsc':
+                return a.price -b.price;
+            case 'priceDesc': 
+                return b.price-a.price;
+            case 'nameAsc': 
+                return a.title.localeCompare(b.title)
+            case 'nameDesc':
+                return b.title.localeCompare(a.title);
+            default:return 0;
+        }
+    })
 
-    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-    const currentProducts = filteredProducts.slice((currentPage-1)*itemsPerPage, currentPage * itemsPerPage);
+    const totalPages = Math.ceil(sortedProduct.length / itemsPerPage);
+    const currentProducts = sortedProduct.slice((currentPage-1)*itemsPerPage, currentPage * itemsPerPage);
+    
+
     return (
         
         <div>
@@ -66,6 +82,16 @@ const ProductList = ({onViewDetail,onAddToCart}: Props) => {
                     }}
                     className="search-input"
                 />
+            </div>
+            <div className="sort-bar">
+                <label>Sắp xếp: </label>
+                <select value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
+                    <option value="default">-- Mặc định --</option>
+                    <option value="priceAsc">Giá tăng dần</option>
+                    <option value="priceDesc">Giá giảm dần</option>
+                    <option value="nameAsc">A → Z</option>
+                    <option value="nameDesc">Z → A</option>
+                </select>
             </div>
             <div className="product-list">
                     {currentProducts.map((prod) =>(
