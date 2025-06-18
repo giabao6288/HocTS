@@ -1,8 +1,10 @@
 import {useState, useEffect} from 'react';
 import {getAllProducts, getCategories, getProductsByCategory} from '../../Services/ApiService/productApi';
 import {Product} from '../../types/product';
-import './ProductList.css';
+import {Row, Card, Col, Select, Input, Pagination, Button, Space} from 'antd'; 
 
+const {Option} = Select;
+const {Search} = Input;
 type Props ={
         onViewDetail:(id:number) => void;
         onAddToCart: (product:Product) => void;
@@ -29,7 +31,8 @@ const ProductList = ({onViewDetail,onAddToCart}: Props) => {
         getCategories().then((data)=>{
             setCategories(data);
         });
-    },[]);
+        setCurrentPage(1);
+    },[sortOption]);
 
     useEffect(() =>{
         setCurrentPage(1);
@@ -57,78 +60,68 @@ const ProductList = ({onViewDetail,onAddToCart}: Props) => {
         }
     })
 
-    const totalPages = Math.ceil(sortedProduct.length / itemsPerPage);
     const currentProducts = sortedProduct.slice((currentPage-1)*itemsPerPage, currentPage * itemsPerPage);
     
 
     return (
         
-        <div>
-            <div className="filter-bar">
-                <label>Lọc theo loại: </label>
-                <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
-                    <option value="all">-- Tất cả --</option>
-                    {Array.isArray(categories) && categories.map(cat =>(
-                        <option key={cat.slug} value={cat.slug}>{cat.name}</option>
-                    ))}
-                </select>
-                <input 
-                    type="text"
-                    placeholder="Tìm sản phẩm..."
-                    value={searchTerm}
-                    onChange={(e) =>{
-                        setSearchTerm(e.target.value);
-                        setCurrentPage(1);
-                    }}
-                    className="search-input"
-                />
-            </div>
-            <div className="sort-bar">
-                <label>Sắp xếp: </label>
-                <select value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
-                    <option value="default">-- Mặc định --</option>
-                    <option value="priceAsc">Giá tăng dần</option>
-                    <option value="priceDesc">Giá giảm dần</option>
-                    <option value="nameAsc">A → Z</option>
-                    <option value="nameDesc">Z → A</option>
-                </select>
-            </div>
-            <div className="product-list">
+        <div style={{padding:'24px'}}>
+            <Space style={{marginBottom:20}} wrap>
+                    <label>Lọc theo loại: </label>
+                    <Select value={selectedCategory} onChange={(value) => setSelectedCategory(value)} style={{width:150}}>
+                        <Option value="all">---- Tất cả ----</Option>
+                        {Array.isArray(categories) && categories.map(cat =>(
+                            <Option key={cat.slug} value={cat.slug}>{cat.name}</Option>
+                        ))}
+                    </Select>
+                    <Search
+                        type="text"
+                        placeholder="Tìm sản phẩm..."
+                        value={searchTerm}
+                        onChange={(e) =>{
+                            setSearchTerm(e.target.value);
+                            setCurrentPage(1);
+                        }}
+                        style={{width:300}}
+                    />
+            </Space>
+
+                <div className="sort-bar">
+                    <label>Sắp xếp: </label>
+                    <Select value={sortOption} onChange={(value) => setSortOption(value)}>
+                        <Option value="default">-- Mặc định --</Option>
+                        <Option value="priceAsc">Giá tăng dần</Option>
+                        <Option value="priceDesc">Giá giảm dần</Option>
+                        <Option value="nameAsc">A → Z</Option>
+                        <Option value="nameDesc">Z → A</Option>
+                    </Select>
+                </div>
+            <Row gutter={[16,16]}>
                     {currentProducts.map((prod) =>(
-                        <div className="product-card" key={prod.id}>
-                            <img src={prod.thumbnail} alt={prod.title}/>
-                            <h3>{prod.title}</h3>
-                            <p>{prod.price} $</p>
-                            <div className="product-actions">
-                                <button onClick={() => onViewDetail(prod.id)}>Xem chi tiết</button>
-                                <button onClick={() => onAddToCart(prod)}>Mua ngay</button>
-                            </div>
-                        </div>
+                        <Col key={prod.id} xs={24} sm={12} md={8} lg={6}>
+                            <Card 
+                                hoverable
+                                cover={<img alt={prod.title} src={prod.thumbnail} height={300} width={200} style={{objectFit:'cover'}}/>}
+                                actions={[
+                                    <Button type="link" onClick={() => onViewDetail(prod.id)}>Xem chi tiết</Button>,
+                                    <Button type="primary" onClick={() => onAddToCart(prod)}>Mua Ngay</Button>
+                                ]}
+                            >
+                                <Card.Meta
+                                    title={prod.title} style={{textAlign:'center'}}
+                                    description={<span style={{color:'#e74c3c', fontWeight:'bold'}}>{prod.price}$</span>}
+                                />
+                            </Card>
+                        </Col>
                     ))}
-            </div>
-            <div className="pagination">
-                <button 
-                    onClick={() => setCurrentPage(prev => Math.max(prev-1,1))}
-                    disabled={currentPage ===1}
-                >
-                    Trang trước
-                </button>
-                {Array.from({length: totalPages },(_,i) => i+1).map((page)=>(
-                    <button 
-                        key={page}
-                        className={page === currentPage ? 'active' : ''}
-                        onClick={() => setCurrentPage(page)}
-                    >
-                        {page}
-                    </button>
-                ))}
-                <button 
-                    onClick={() =>setCurrentPage(prev => Math.min(prev+1, totalPages))}
-                    disabled={currentPage === totalPages}
-                >
-                    Trang sau
-                </button>
-            </div>
+            </Row>
+            <Pagination
+                current={currentPage}
+                total={sortedProduct.length}
+                pageSize={itemsPerPage}
+                onChange={(page) => setCurrentPage(page)}
+                style={{marginTop:30, justifyContent:'center'}}
+            />
         </div>
     );
 };

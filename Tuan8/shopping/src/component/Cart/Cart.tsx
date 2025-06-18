@@ -1,6 +1,7 @@
 import {Product} from '../../types/product';
-import './Cart.css';
+import {List, InputNumber, Button, Typography, Divider, Row, Col, Empty, message} from 'antd';
 
+const {Title, Text} = Typography;
 const Cart =({cart, updateQuantity, removeItem}: {
     cart : Product[];
     updateQuantity:(id:number,qty:number)=>void;
@@ -9,34 +10,49 @@ const Cart =({cart, updateQuantity, removeItem}: {
 }) => {
     const total=cart.reduce((sum,p) =>sum + p.price *(p.quantity || 1),0);
     return(
-        <div className="cart">
-            <h2>Giỏ hàng</h2>
+        <div style={{maxWidth:900, margin:'0 auto', padding:20}}>
+            <Title level={2}>Giỏ hàng</Title>
             {cart.length ===0 ? (
-                <p>Giỏ hàng trống.</p>
+                <Empty description="Giỏ hàng trống."/>
             ):(
-            cart.map(item => (
-                <div className="cart-item" key={item.id}>
-                    <span>{item.title}</span>
-                    <span>Giá: {item.price}$</span>
-                    <span>
-                        Thành tiền:{(item.price*(item.quantity||1)).toFixed(2)}$
-                    </span>
-                    <input  
-                        type="number"
-                        value={item.quantity || 1}
-                        onChange={e => updateQuantity(item.id, Number(e.target.value))}
-                        min="1"
-                    />
-                    <button onClick={() =>{
-                        if(window.confirm("Bạn có chắc muốn xóa sản phẩm ?")){
-                            removeItem(item.id)
-                            alert("Đã xóa sản phẩm khỏi giỏ hàng!");
-                        }
-                    }}>Xóa</button>
-                </div>
-            ))
-            )}
-            <h3>Tổng tiền: {total} $</h3>
+                <List
+                    itemLayout="horizontal"
+                    dataSource={cart}
+                    renderItem={(item) =>(
+                        <List.Item  
+                            actions={[
+                                <InputNumber
+                                    min={1}
+                                    value={item.quantity || 1}
+                                    onChange={(value) => updateQuantity(item.id, Number(value))}
+                                />,
+                                <Button danger onClick={() =>removeItem(item.id)}>
+                                    Xóa
+                                </Button>,
+                            ]}
+                        >
+                        <List.Item.Meta
+                            title={item.title}
+                            description={
+                                <div>
+                                    <Text>Giá: {item.price} $</Text>
+                                    <br/>
+                                    <Text strong>
+                                        Thành tiền: {(item.price * (item.quantity || 1)).toFixed(2)} $
+                                    </Text>
+                                </div>
+                            }
+                        />
+                        </List.Item>
+                    )}
+                />
+                )}
+                <Divider/>
+                <Row justify="end">
+                    <Col>
+                        <Title level={3}>Tổng tiền: {total.toFixed(2)} $</Title>
+                    </Col>
+                </Row>
         </div>
     );
 };

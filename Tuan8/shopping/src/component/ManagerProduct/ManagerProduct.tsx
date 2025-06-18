@@ -1,6 +1,6 @@
 import {useEffect, useState, useRef} from 'react';
 import {Product} from '../../types/product';
-import './ManagerProduct.css';
+import {Table, Button, Input, Form, Space, Typography, message, Image,} from 'antd';
 import {getAllProducts,deleteProduct,addProduct,updateProduct} from '../../Services/ApiService/productApi';
 
 const defaultForm:Product ={
@@ -13,11 +13,14 @@ const defaultForm:Product ={
     images:[]
 };
 
+const {Title} = Typography;
+
 const ManagerProduct=() =>{
     const [products, setProducts] = useState<Product[]>([]);
-    const [form,setForm] = useState<Product>(defaultForm);
+    const [form]=Form.useForm();
     const [isEditing,setIsEditing] = useState(false);
-    const formRef = useRef<HTMLFormElement>(null);
+    const [editingId, setEditingId] = useState<number | null>(null);
+    const formRef = useRef<HTMLDivElement>(null);
 
     const fetchProducts = async() => {
         const data =await getAllProducts();
@@ -28,32 +31,29 @@ const ManagerProduct=() =>{
         fetchProducts();
     },[]);
 
-    const handleChange = (e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setForm({...form,[e.target.name]: e.target.value});
-    };
-
-    const handleSubmit = async (e:React.FormEvent) => {
-        e.preventDefault();
+    const onSubmit =async (value:Product) => {
         try{
-            if(isEditing){
-                const updated = await updateProduct(form.id,form);
-                setProducts(products.map(p => (p.id === form.id ? updated: p)));
+            if(editingId !== null) {
+                const updated = await updateProduct(editingId, value);
+                setProducts(products.map(p => (p.id === editingId ? updated : p)));
+                message.success("Cập nhật thành công!");
             }else {
-                const added =await addProduct(form);
+                const added= await addProduct(value);
                 setProducts([added,...products]);
+                message.success("Thêm sản phẩm thành công");
             }
-            setForm(defaultForm);
+            form.resetFields();
             setIsEditing(false);
-            fetchProducts();
-        }catch(error){
-            alert("Đã có lỗi xảy ra! ");
-            console.log(error);
+            setEditingId(null);
+        } catch(err){
+            message.error("Lỗi khi lưu sản phẩm");
         }
     };
 
     const handleEdit = (product:Product) => {
-        setForm(product);
+        form.setFieldsValue(product);
         setIsEditing(true);
+        setEditingId(product.id);
         setTimeout(() =>{
             formRef.current?.scrollIntoView({behavior:'smooth'});
         },100);
@@ -63,62 +63,97 @@ const ManagerProduct=() =>{
         if(window.confirm("Bạn có chắc muốn xóa sản phẩm này không?")){
             try{
                 await deleteProduct(id);
-                await fetchProducts();
+                fetchProducts();
+                message.success("Xóa thành công");
             }catch(error){
-                alert("Xóa thất bại");
-                console.error(error);
+                message.error("Không thể xóa sản phẩm!");
             }
         }
     };
 
-
+    const columns=[
+        {title:'ID', dataIndex:'id', key:'id', width:50},
+        {title:'Tên', dataIndex:'title', key:'title'},
+        {title:'Giá', dataIndex:'price', key:'price'},
+        {
+            title:'Mô tả',
+            dataIndex:'description',
+            key:'description',
+            ellipsis:true,
+        },
+        {title:'Danh mục', dataIndex:'category', key:'category'},
+        {
+            title:'Ảnh',
+            dataIndex:'thumbnail',
+            key:'thumbnail',
+            render:(url:string) =><Image width={50} src={url}/>,
+        },
+        {
+            title:'Hành động',
+            dataIndex:'actions',
+            render:(_:any,record:Product) => (
+                <Space>
+                    <Button onClick={() => handleEdit(record)}>Sửa</Button>
+                    <Button danger onClick={() => handleDelete(record.id)}>Xóa</Button>
+                </Space>
+            ),
+        },
+    ];
     return(
-        <div className="manager-container">
-            <h2 className="title">Quản lý sản phẩm</h2>
+        <div style={{padding:24}}>
+            <Title level={3} style={{fontWeight:'bold'}}>Quản lý sản phẩm</Title>
 
-            <form ref={formRef} onSubmit={handleSubmit} className="form-section">
-                <input name="title" placeholder="Tên sản phẩm" value={form.title} onChange={handleChange} required/>
-                <input name="price" type="number" placeholder="Giá" value={form.price} onChange={handleChange} required/>
-                <textarea name="description" placeholder="Mô tả" value={form.description} onChange={handleChange}/>
-                <input name="category" placeholder="Danh mục" value={form.category} onChange={handleChange}/>
-                <input name="thumbnail" placeholder="Link ảnh" value={form.thumbnail} onChange={handleChange}/>
-                <div className="form-buttons">
-                    <button type="submit">{isEditing ? 'Cập nhật' : 'Thêm mới'}</button>
-                    {isEditing && <button type="button" onClick={() => {setForm(defaultForm); setIsEditing(false);}}>Hủy</button>}
-                </div>
-            </form>
-
-            <table className="product-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Tên</th>
-                        <th>Giá</th>
-                        <th>Mô tả</th>
-                        <th>Danh mục</th>
-                        <th>Ảnh</th>
-                        <th>Hành động</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {products.map(prod => (
-                        <tr key={prod.id}>
-                            <td>{prod.id}</td>
-                            <td>{prod.title}</td>
-                            <td>{prod.price}</td>
-                            <td className="description">{prod.description}</td>
-                            <td>{prod.category}</td>
-                            <td><img src={prod.thumbnail} alt={prod.title} width={50} /></td>
-                            <td className="actions">
-                                <button onClick={() => handleEdit(prod)}>Sửa</button>
-                                <button onClick={() => handleDelete(prod.id)}>Xóa</button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <div ref={formRef} style={{maxWidth:600}}>
+                <Form 
+                    form={form}
+                    layout="vertical"
+                    onFinish={onSubmit}
+                    initialValues={defaultForm}
+                >
+                    <Form.Item name="title" label="Tên sản phẩm" rules={[{ required:true}]}>
+                        <Input/>
+                    </Form.Item>
+                    <Form.Item name="price" label="Giá" rules={[{required:true}]}>
+                        <Input type="number" />
+                    </Form.Item>
+                    <Form.Item name="description" label="Mô tả">
+                        <Input.TextArea rows={3}/>
+                    </Form.Item>
+                    <Form.Item name="category" label="Danh mục">
+                        <Input/>
+                    </Form.Item>
+                    <Form.Item name="thumbnail" label="Link ảnh">
+                        <Input/>
+                    </Form.Item>
+                    <Form.Item>
+                        <Space>
+                            <Button type="primary" htmlType="submit">
+                                {isEditing ?'Cập nhật': 'Thêm mới'}
+                            </Button>
+                            {isEditing && (
+                                <Button 
+                                    onClick={() => {
+                                        form.resetFields();
+                                        setIsEditing(false);
+                                        setEditingId(null);
+                                    }}
+                                >
+                                Hủy
+                                </Button>
+                            )}
+                        </Space>
+                    </Form.Item>
+                </Form>
+            </div>
+            <Table  
+                dataSource={products}
+                columns={columns}
+                rowKey="id"
+                style={{marginTop:32}}
+                scroll={{x:'max-content'}}
+            />
         </div>
-    )
-}
+    );
+};
 
 export default ManagerProduct;
