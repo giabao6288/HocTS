@@ -99,19 +99,22 @@ const ProductList = ({onViewDetail,onAddToCart}: Props) => {
             <Row gutter={[16,16]}>
                     {currentProducts.map((prod) =>(
                         <Col key={prod.id} xs={24} sm={12} md={8} lg={6}>
-                            <Card 
-                                hoverable
-                                cover={<img alt={prod.title} src={prod.thumbnail} height={300} width={200} style={{objectFit:'cover'}}/>}
-                                actions={[
-                                    <Button type="link" onClick={() => onViewDetail(prod.id)}>Xem chi tiết</Button>,
-                                    <Button type="primary" onClick={() => onAddToCart(prod)}>Mua Ngay</Button>
-                                ]}
-                            >
-                                <Card.Meta
-                                    title={prod.title} style={{textAlign:'center'}}
-                                    description={<span style={{color:'#e74c3c', fontWeight:'bold'}}>{prod.price}$</span>}
-                                />
-                            </Card>
+                           <div style={{height:'100%'}}>
+                                <Card 
+                                    hoverable
+                                    style={{height:'100%', display:'flex', flexDirection:'column',justifyContent:'space-between'}}
+                                    cover={<img alt={prod.title} src={prod.thumbnail} height={300} width={200} style={{objectFit:'cover'}}/>}
+                                    actions={[
+                                        <Button type="link" onClick={() => onViewDetail(prod.id)}>Xem chi tiết</Button>,
+                                        <Button type="primary" onClick={() => onAddToCart(prod)}>Mua Ngay</Button>
+                                    ]}
+                                >
+                                    <Card.Meta
+                                        title={prod.title} style={{textAlign:'center'}}
+                                        description={<span style={{color:'#e74c3c', fontWeight:'bold'}}>{prod.price}$</span>}
+                                    />
+                                </Card>
+                           </div>
                         </Col>
                     ))}
             </Row>

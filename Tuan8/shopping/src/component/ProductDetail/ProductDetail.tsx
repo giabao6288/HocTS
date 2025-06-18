@@ -27,7 +27,7 @@ const ProductDetail= ({onAddToCart} : {onAddToCart :(p:Product)=>void})=>{
     if(!product) return <p>Loading...</p>;
 
     return (
-        <div style={{maxWidth:1000, margin:'auto', padding:20}}>
+        <div style={{maxWidth:1200, margin:'auto', padding:20}}>
             <Card style={{marginBottom:40, boxShadow:'0 0 15px rgba(0,0,0,0.1'}}>
                 <Row gutter={40}>
                     <Col xs={24} md={10} style={{textAlign:'center'}}>

@@ -11,7 +11,7 @@ import ConfigPage from './pages/ConfigPage';
 import {Layout, Menu, Badge} from 'antd';
 import {HomeOutlined, ShoppingCartOutlined, AppstoreOutlined, ToolOutlined} from '@ant-design/icons';
 
-import './App.css';
+import './App.css'
 const {Header, Content} = Layout;
 
 
@@ -46,7 +46,7 @@ function App(){
     <Layout>
         <Header style={{userSelect:'none',display:'flex', alignItems:'center', background:'#001529'}}>
           <div className="logo" style={{color:'white', fontWeight:'bold', marginRight:'40px', fontSize:'20px'}}>🛒 Shoppinggg</div>
-          <Menu theme="dark" mode="horizontal" style={{flex:1}}>
+          <Menu theme="dark" mode="horizontal" style={{flex:1, overflowX:'auto'}}>
             <Menu.Item key="home" icon={<HomeOutlined/>}>
               <NavLink to="/" className={({isActive})=> isActive ? 'active' : ''}>Trang chủ</NavLink>
             </Menu.Item>

@@ -1,6 +1,6 @@
 import {useEffect, useState, useRef} from 'react';
 import {Product} from '../../types/product';
-import {Table, Button, Input, Form, Space, Typography, message, Image,} from 'antd';
+import {Row,Col,Drawer,Table, Button, Input, Form, Space, Typography, message, Image,} from 'antd';
 import {getAllProducts,deleteProduct,addProduct,updateProduct} from '../../Services/ApiService/productApi';
 
 const defaultForm:Product ={
@@ -20,6 +20,8 @@ const ManagerProduct=() =>{
     const [form]=Form.useForm();
     const [isEditing,setIsEditing] = useState(false);
     const [editingId, setEditingId] = useState<number | null>(null);
+    const [isDrawerOpen, setIsDrawerOpen] =useState(false);
+
     const formRef = useRef<HTMLDivElement>(null);
 
     const fetchProducts = async() => {
@@ -45,6 +47,7 @@ const ManagerProduct=() =>{
             form.resetFields();
             setIsEditing(false);
             setEditingId(null);
+            setIsDrawerOpen(false);
         } catch(err){
             message.error("Lỗi khi lưu sản phẩm");
         }
@@ -54,9 +57,7 @@ const ManagerProduct=() =>{
         form.setFieldsValue(product);
         setIsEditing(true);
         setEditingId(product.id);
-        setTimeout(() =>{
-            formRef.current?.scrollIntoView({behavior:'smooth'});
-        },100);
+        setIsDrawerOpen(true);
     };
 
     const handleDelete = async (id:number) => {
@@ -75,18 +76,22 @@ const ManagerProduct=() =>{
         {title:'ID', dataIndex:'id', key:'id', width:50},
         {title:'Tên', dataIndex:'title', key:'title'},
         {title:'Giá', dataIndex:'price', key:'price'},
-        {
-            title:'Mô tả',
-            dataIndex:'description',
-            key:'description',
-            ellipsis:true,
-        },
         {title:'Danh mục', dataIndex:'category', key:'category'},
         {
             title:'Ảnh',
             dataIndex:'thumbnail',
             key:'thumbnail',
             render:(url:string) =><Image width={50} src={url}/>,
+        },
+        {
+            title:'Mô tả',
+            dataIndex:'description',
+            key:'description',
+            render:(text:string) => (
+                <div style= {{whiteSpace:'normal', wordBreak:'break-word', maxWidth:400}}>
+                    {text}
+                </div>
+            ),
         },
         {
             title:'Hành động',
@@ -100,59 +105,93 @@ const ManagerProduct=() =>{
         },
     ];
     return(
-        <div style={{padding:24}}>
-            <Title level={3} style={{fontWeight:'bold'}}>Quản lý sản phẩm</Title>
-
-            <div ref={formRef} style={{maxWidth:600}}>
-                <Form 
-                    form={form}
-                    layout="vertical"
-                    onFinish={onSubmit}
-                    initialValues={defaultForm}
+        <Row justify="center" style={{padding:24, maxWidth:'100%', width:'100%'}}>
+            <Col xs={24} sm={24} md={24} lg={24} xl={24}>
+                <Title level={3} style={{fontWeight:'bold'}}>Quản lý sản phẩm</Title>
+    
+                <Button 
+                    type="primary"
+                    style={{marginBottom:16}}
+                    onClick={() =>{
+                        form.resetFields();
+                        setIsEditing(false);
+                        setEditingId(null);
+                        setIsDrawerOpen(true);
+                    }}
                 >
-                    <Form.Item name="title" label="Tên sản phẩm" rules={[{ required:true}]}>
-                        <Input/>
-                    </Form.Item>
-                    <Form.Item name="price" label="Giá" rules={[{required:true}]}>
-                        <Input type="number" />
-                    </Form.Item>
-                    <Form.Item name="description" label="Mô tả">
-                        <Input.TextArea rows={3}/>
-                    </Form.Item>
-                    <Form.Item name="category" label="Danh mục">
-                        <Input/>
-                    </Form.Item>
-                    <Form.Item name="thumbnail" label="Link ảnh">
-                        <Input/>
-                    </Form.Item>
-                    <Form.Item>
-                        <Space>
-                            <Button type="primary" htmlType="submit">
-                                {isEditing ?'Cập nhật': 'Thêm mới'}
-                            </Button>
-                            {isEditing && (
+                    Thêm sản phẩm
+                </Button>
+    
+                <Title level={3}>Thông tin sản phẩm</Title>
+    
+                <Table 
+                    dataSource={products}
+                    columns={columns}
+                
+                    scroll={{x:'max-content'}}
+                    
+                />
+    
+                <Drawer
+                    title={isEditing ? 'Cập nhật sản phẩm' : 'Thêm sản phẩm'}
+                    open={isDrawerOpen}
+                    onClose={() => {
+                        setIsDrawerOpen(false)
+                        form.resetFields();
+                        setIsEditing(false);
+                        setEditingId(null);
+                    }}
+                    width={400}
+                    >
+                        <Form 
+                        form={form}
+                        layout="vertical"
+                        onFinish={onSubmit}
+                        initialValues={isEditing ? undefined: defaultForm}
+                    >
+                        <Form.Item name="title" label="Tên sản phẩm" rules={[{ required:true}]}>
+                            <Input/>
+                        </Form.Item>
+                        <Form.Item name="price" label="Giá" rules={[{required:true}]}>
+                            <Input type="number" />
+                        </Form.Item>
+                        <Form.Item name="category" label="Danh mục">
+                            <Input/>
+                        </Form.Item>
+                        <Form.Item name="description" label="Mô tả">
+                            <Input.TextArea rows={3}/>
+                        </Form.Item>
+                        <Form.Item name="thumbnail" label="Link ảnh">
+                            <Input/>
+                        </Form.Item>
+                        <Form.Item>
+                            <Space>
                                 <Button 
-                                    onClick={() => {
-                                        form.resetFields();
-                                        setIsEditing(false);
-                                        setEditingId(null);
-                                    }}
-                                >
-                                Hủy
+                                    type="primary" 
+                                        htmlType="submit">
+                                    {isEditing ?'Cập nhật': 'Thêm mới'}
                                 </Button>
-                            )}
-                        </Space>
-                    </Form.Item>
-                </Form>
-            </div>
-            <Table  
-                dataSource={products}
-                columns={columns}
-                rowKey="id"
-                style={{marginTop:32}}
-                scroll={{x:'max-content'}}
-            />
-        </div>
+                                {isEditing && (
+                                    <Button 
+                                        onClick={() => {
+                                            form.resetFields();
+                                            setIsEditing(false);
+                                            setEditingId(null);
+                                        }}
+                                    >
+                                    Hủy
+                                    </Button>
+                                )}
+                            </Space>
+                        </Form.Item>
+                    </Form>
+                    </Drawer>
+                <div ref={formRef} style={{maxWidth:600}}>
+                    
+                </div>
+            </Col>
+          
+        </Row>
     );
 };
 

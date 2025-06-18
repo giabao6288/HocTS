@@ -1,5 +1,5 @@
 import {Product} from '../../types/product';
-import {List, InputNumber, Button, Typography, Divider, Row, Col, Empty, message} from 'antd';
+import {List, InputNumber, Button, Typography, Divider, Row, Col, Empty, message, Image} from 'antd';
 
 const {Title, Text} = Typography;
 const Cart =({cart, updateQuantity, removeItem}: {
@@ -10,7 +10,8 @@ const Cart =({cart, updateQuantity, removeItem}: {
 }) => {
     const total=cart.reduce((sum,p) =>sum + p.price *(p.quantity || 1),0);
     return(
-        <div style={{maxWidth:900, margin:'0 auto', padding:20}}>
+        <Row justify="center" style={{padding:20}}>
+            <Col xs={24} sm={22} md={20} lg={16} xl={12}>
             <Title level={2}>Giỏ hàng</Title>
             {cart.length ===0 ? (
                 <Empty description="Giỏ hàng trống."/>
@@ -32,6 +33,7 @@ const Cart =({cart, updateQuantity, removeItem}: {
                             ]}
                         >
                         <List.Item.Meta
+                            avatar={<Image src={item.thumbnail} alt={item.title} width={80}/>}
                             title={item.title}
                             description={
                                 <div>
@@ -53,7 +55,8 @@ const Cart =({cart, updateQuantity, removeItem}: {
                         <Title level={3}>Tổng tiền: {total.toFixed(2)} $</Title>
                     </Col>
                 </Row>
-        </div>
+                </Col>
+        </Row>
     );
 };
 export default Cart;
