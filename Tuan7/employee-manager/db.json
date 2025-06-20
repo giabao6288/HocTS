@@ -1,84 +1,20 @@
 {
   "employees": [
     {
-      "id": "2",
-      "name": "Trần Thị B",
-      "birthYear": 1995,
+      "id": "52cc",
+      "name": "Trần Cẩm Ny",
+      "birthYear": 2025,
       "gender": "Nữ",
-      "phone": "0912345678",
-      "email": "thib@gmail.com"
+      "phone": "0941929506",
+      "email": "cnytt296@gmail.com"
     },
     {
-      "id": "4975",
       "name": "Nguyễn Gia Bảo",
-      "birthYear": "2003",
+      "birthYear": 2003,
       "gender": "Nam",
-      "phone": "0962916288",
-      "email": "giabao6288@gmail.com"
-    },
-    {
-      "id": "2488",
-      "name": "Nguyễn Gia Long",
-      "birthYear": "2006",
-      "gender": "Nam",
-      "phone": "0353.233",
-      "email": "gialong@gmail.com"
-    },
-    {
-      "id": "28a1",
-      "name": "aaa",
-      "birthYear": 2025,
-      "gender": "Nam",
-      "phone": "20516531656",
-      "email": "a@gmail.com"
-    },
-    {
-      "id": "1df9",
-      "name": "cccc",
-      "birthYear": 2025,
-      "gender": "Nam",
-      "phone": "061981656",
-      "email": "ccc@gmail.com"
-    },
-    {
-      "id": "48ec",
-      "name": "Ny",
-      "birthYear": 2025,
-      "gender": "Nữ",
-      "phone": "029619651",
-      "email": "ny@gmail.com"
-    },
-    {
-      "id": "cad7",
-      "name": "Huy",
-      "birthYear": "2003",
-      "gender": "Nam",
-      "phone": "0316516531",
-      "email": "huy@gmail.com"
-    },
-    {
-      "id": "5887",
-      "name": "Huy",
-      "birthYear": "2006",
-      "gender": "Nữ",
-      "phone": "033156548",
-      "email": "huy1@gmail.com"
-    },
-    {
-      "id": "eda8",
-      "name": "Vinh",
-      "birthYear": "2000",
-      "gender": "Nam",
-      "phone": "039745166",
-      "email": "vinh@gmail.com"
-    },
-    {
-      "id": "7e02",
-      "name": "Nguyễn Gia Bảo",
-      "birthYear": 2025,
-      "gender": "Nam",
-      "phone": "09948916",
-      "email": "giabao@gmail.com"
+      "phone": "0948844678",
+      "email": "giabao6288@gmail.com",
+      "id": "666a"
     }
   ]
 }
